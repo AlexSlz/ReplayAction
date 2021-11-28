@@ -1,9 +1,7 @@
 ﻿using Gma.System.MouseKeyHook;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ReplayAction.MyHook;
 
@@ -13,6 +11,8 @@ namespace ReplayAction
     public partial class Form1 : Form
     {
         private IKeyboardMouseEvents m_GlobalHook;
+
+        private IKeyboardMouseEvents hotKeys = Hook.GlobalEvents();
         List<string> EditTemp = new List<string>();
         public void Edit()
         {
@@ -76,7 +76,17 @@ namespace ReplayAction
         }
         public Form1()
         {
-            InitializeComponent();
+            hotKeys.KeyDown += (s, e) =>
+            {
+                if (e.KeyData.ToString() == "P, Shift")
+                {
+                    checkBox2.Checked = !checkBox2.Checked;
+                }else if (e.KeyData.ToString() == "R, Shift")
+                {
+                    checkBox1.Checked = !checkBox1.Checked;
+                }
+            };
+           InitializeComponent();
             for (int i = 0; i < action.Length; i++)
             {
                 bool skip = false;
